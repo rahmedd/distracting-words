@@ -1,15 +1,13 @@
 import * as fs from 'fs'
-// const fs = require('fs')
 import { validateCode } from '../src/index'
-// const validateCode = require('../src/index')
 
-const desmosText = fs.readFileSync('desmos_distracting_words.txt', 'utf8').toString()
-const desmosWords = desmosText.replace(/\r\n/g,'\n').split('\n')
+const desmosTextFile = fs.readFileSync('desmos_distracting_words.txt', 'utf8').toString()
+const distracting_words = desmosTextFile.replace(/\r\n/g,'\n').split('\n')
 
 // Initial check
 test('default words against default words', () => {
-	desmosWords.forEach(word => {
-		expect( validateCode(word, desmosWords, new Set()) ).toBe(false)
+	distracting_words.forEach(word => {
+		expect( validateCode(word, distracting_words, new Set()) ).toBe(false)
 	})
 })
 
@@ -38,25 +36,25 @@ test('adding the same code twice', () => {
 
 // Cassroom code tests
 test('code: RATS42', () => {
-	expect( validateCode('RATS42', desmosWords, new Set()) ).toBe(false)
+	expect( validateCode('RATS42', distracting_words, new Set()) ).toBe(false)
 })
 
 test('code: RA1TSF', () => {
-	expect( validateCode('RA1TSF', desmosWords, new Set()) ).toBe(false)
+	expect( validateCode('RA1TSF', distracting_words, new Set()) ).toBe(false)
 })
 
 test('code: 3RQATS', () => {
-	expect( validateCode('3RQATS', desmosWords, new Set()) ).toBe(false)
+	expect( validateCode('3RQATS', distracting_words, new Set()) ).toBe(false)
 })
 
 test('code: PIR7ATS77', () => {
-	expect( validateCode('P7R7ATS7', desmosWords, new Set()) ).toBe(false)
+	expect( validateCode('P7R7ATS7', distracting_words, new Set()) ).toBe(false)
 })
 
-test('code: mice', () => {
-	expect( validateCode('miceand', desmosWords, new Set()) ).toBe(true)
+test('code: miceand', () => {
+	expect( validateCode('miceand', distracting_words, new Set()) ).toBe(true)
 })
 
 test('code: 1i11ypad', () => {
-	expect( validateCode('1i11ypad', desmosWords, new Set()) ).toBe(true)
+	expect( validateCode('1i11ypad', distracting_words, new Set()) ).toBe(true)
 })
