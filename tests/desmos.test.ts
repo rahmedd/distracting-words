@@ -29,32 +29,57 @@ test('existing code', () => {
 
 test('adding the same code twice', () => {
 	const code = 'x'
+	const existingCodes: Set<string> = new Set()
+	expect( validateCode(code, ['testWord'], existingCodes) ).toBe(true)
+	expect( validateCode(code, ['testWord'], existingCodes) ).toBe(false)
+})
+
+// combinations
+test('distracting word and in existing_codes', () => {
+	const code = 'fuzzy'
+	const existing_codes: Set<string> = new Set([code])
+	expect( validateCode(code, distracting_words, existing_codes) ).toBe(false)
+})
+
+test('distracting word and not in existing_codes', () => {
+	const code = 'fuzzy'
 	const existing_codes: Set<string> = new Set()
-	expect( validateCode(code, ['testWord'], existing_codes) ).toBe(true)
+	expect( validateCode(code, distracting_words, existing_codes) ).toBe(false)
+})
+
+test('not distracting word and not in existing_codes', () => {
+	const code = 'laptop'
+	const existing_codes: Set<string> = new Set()
+	expect( validateCode(code, distracting_words, existing_codes) ).toBe(true)
+})
+
+test('not distracting word and in existing_codes', () => {
+	const code = 'laptop'
+	const existing_codes: Set<string> = new Set([code])
 	expect( validateCode(code, ['testWord'], existing_codes) ).toBe(false)
 })
 
 // Cassroom code tests
-test('code: RATS42', () => {
+test('start with a distracting word', () => {
 	expect( validateCode('RATS42', distracting_words, new Set()) ).toBe(false)
 })
 
-test('code: RA1TSF', () => {
+test('char in the middle and end of a distracting word ', () => {
 	expect( validateCode('RA1TSF', distracting_words, new Set()) ).toBe(false)
 })
 
-test('code: 3RQATS', () => {
+test('char in the beginning and middle of a distracting word', () => {
 	expect( validateCode('3RQATS', distracting_words, new Set()) ).toBe(false)
 })
 
-test('code: PIR7ATS77', () => {
+test('distracting word/numbers in the middle of another distracting word', () => {
 	expect( validateCode('P7R7ATS7', distracting_words, new Set()) ).toBe(false)
 })
 
-test('code: miceand', () => {
+test('non distracting code', () => {
 	expect( validateCode('miceand', distracting_words, new Set()) ).toBe(true)
 })
 
-test('code: 1i11ypad', () => {
+test('three numbers in a non distracting word', () => {
 	expect( validateCode('1i11ypad', distracting_words, new Set()) ).toBe(true)
 })
